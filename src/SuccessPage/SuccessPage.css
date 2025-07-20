@@ -1,0 +1,25 @@
+.success-page {
+    display: flex;
+    min-height: 100vh;
+}
+
+.success-page__layout {
+    display: flex;
+    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+}
+
+.success-page__text {
+    margin: auto;
+    padding: 20px;
+    border: 2px solid green;
+    border-radius: 8px;
+    font-size: 24px;
+    text-align: center;
+}
+
+.success-page__btn {
+    margin-top: 20px;
+}
