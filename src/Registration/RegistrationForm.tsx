@@ -27,9 +27,12 @@ export const RegistrationForm = ({onSuccess}: RegistrationFormProps) => {
                 method: 'POST',
                 body: JSON.stringify({ name, email, password }),
                 headers: {"content-type": "application/json"},
+                credentials: 'include'
             });
 
-            if (res.statusText === 'ok') {
+            if (res.statusText.toLowerCase() === 'ok') {
+                const data = await res.json();
+                localStorage.setItem("userId", data.id);
                 onSuccess();
             }
         } catch (e) {
