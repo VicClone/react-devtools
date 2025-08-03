@@ -15,17 +15,30 @@ export const RegistrationForm = ({onSuccess}: RegistrationFormProps) => {
     const [password, setPassword] = useState<InputValue>('password');
     const [confirmPassword, setConfirmPassword] = useState<InputValue>('password');
 
-    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         console.log({
             name, surname, email, password, confirmPassword,
         })
 
-        onSuccess();
+        try {
+            const res = await fetch('http://localhost:3000/api/register', {
+                method: 'POST',
+                body: JSON.stringify({ name, email, password }),
+                headers: {"content-type": "application/json"},
+            });
+
+            if (res.statusText === 'ok') {
+                onSuccess();
+            }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     return (
+        // <form className="registration-form" action={(e: unknown) => {onSubmit(e as React.FormEvent<HTMLFormElement>)}} method={"GET"}>
         <form className="registration-form" onSubmit={onSubmit}>
             <fieldset className="registration-form__fieldset">
                 <legend className="registration-form__legend">
