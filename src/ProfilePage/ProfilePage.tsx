@@ -36,6 +36,7 @@ export const ProfilePage = ({onExit}: SuccessPageProps) => {
     return (
         <div className="success-page">
             <div className="success-page__layout">
+                {user && JSON.parse(user)}
                 <p className="success-page__text">
                     Вы успешно зарегистрировались!
                 </p>

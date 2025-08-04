@@ -21,10 +21,12 @@ router.post('/register', async (req, res) => {
         let file;
         let users = [];
         if (fs.existsSync(fileName)) {
-            file = await fs.readFile(fileName, (err) => {
+            file = fs.readFileSync(fileName, (err, data) => {
                 if (err) {
                     throw err;
                 }
+
+
             });
             users = JSON.stringify(file);
         }
@@ -63,6 +65,14 @@ router.post('/register', async (req, res) => {
     );
 });
 
+router.get('/auth', async (req, res) => {
+    if (req.session.user.id !== req.query.id) {
+        res.status(401).send(JSON.stringify({ status: 'Не авторизован' }));
+    }
+
+    res.status(200).send(JSON.stringify({ status: 'авторизован' }));
+});
+
 router.post('/login', (req, res) => {
     const { email, password } = req.body;
 });
@@ -77,11 +87,22 @@ router.get('/logout', (req, res) => {
 });
 
 router.get('/user', (req, res) => {
-    console.log('userId', req.query.id);
-    console.log('sessionId', req.session.id);
-    console.log('sessionUser', req.session.user);
+    if (req.session.user.id !== req.query.id) {
+        res.status(401).send({ status: 'Не авторизован' });
+    }
 
-    res.status(200).send(req.session.user);
+    const file= fs.readFileSync(fileName, (err, data) => {
+        if (err) {
+            throw err;
+        }
+
+
+    });
+    const users = JSON.parse(file);
+    console.log(users);
+    // const user = users.find((user) => user.id === req.query.id);
+    const user = {};
+    res.status(200).send(user);
 });
 
 module.exports = router;
