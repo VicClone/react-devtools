@@ -10,8 +10,14 @@ function App() {
 
     useEffect(() => {
         const auth = async () => {
-            const id = localStorage.getItem('id');
-            const res = await fetch(`/api/auth?id=${id}`);
+            const id = localStorage.getItem('userId');
+            const res = await fetch(`http://localhost:3000/api/auth?id=${id}`,
+                {
+                    method: 'POST',
+                    body: JSON.stringify({ id }),
+                    headers: {"content-type": "application/json"},
+                    credentials: 'include'
+                });
 
             setIsSuccess(res.status === 200);
         };

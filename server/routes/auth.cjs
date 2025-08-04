@@ -3,6 +3,22 @@ const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
 
+const FILE_PATH = 'users.json';
+
+const getUsersFromFile = () => {
+    if (!fs.existsSync(FILE_PATH)) {
+        return [];
+    }
+
+    const file = fs.readFileSync(FILE_PATH, (err) => {
+        if (err) {
+            throw err;
+        }
+    });
+
+    return JSON.parse(file);
+};
+
 router.post('/register', async (req, res) => {
     const { name, email, password } = req.body;
 
@@ -17,19 +33,9 @@ router.post('/register', async (req, res) => {
     req.session.user = { id, email };
 
     try {
-        const fileName = 'users.json';
-        let file;
-        let users = [];
-        if (fs.existsSync(fileName)) {
-            file = fs.readFileSync(fileName, (err, data) => {
-                if (err) {
-                    throw err;
-                }
+        const users = getUsersFromFile();
 
-
-            });
-            users = JSON.stringify(file);
-        }
+        console.log(users);
 
         users.push({
             id,
@@ -38,7 +44,7 @@ router.post('/register', async (req, res) => {
             password,
         });
 
-        await fs.writeFile(fileName, JSON.stringify(users), (err) => {
+        await fs.writeFile(FILE_PATH, JSON.stringify(users), (err) => {
             if (err) {
                 throw err;
             }
@@ -47,15 +53,8 @@ router.post('/register', async (req, res) => {
         });
     } catch (err) {
         console.log(err);
-        res.status(500).json({ message: err.message });
+        return res.status(500).json({ message: err.message });
     }
-
-    req.session.save((err) => {
-        if (err) {
-            console.error('Ошибка сохранения сессии:', err);
-            return res.status(500).send('Ошибка сервера');
-        }
-    });
 
     res.status(200).send(
         JSON.stringify({
@@ -65,9 +64,12 @@ router.post('/register', async (req, res) => {
     );
 });
 
-router.get('/auth', async (req, res) => {
-    if (req.session.user.id !== req.query.id) {
-        res.status(401).send(JSON.stringify({ status: 'Не авторизован' }));
+router.post('/auth', async (req, res) => {
+    console.log(req.session?.user);
+    if (req.session?.user?.id !== req.body.id) {
+        return res
+            .status(401)
+            .send(JSON.stringify({ status: 'Не авторизован' }));
     }
 
     res.status(200).send(JSON.stringify({ status: 'авторизован' }));
@@ -87,21 +89,17 @@ router.get('/logout', (req, res) => {
 });
 
 router.get('/user', (req, res) => {
-    if (req.session.user.id !== req.query.id) {
-        res.status(401).send({ status: 'Не авторизован' });
+    if (req.session?.user?.id !== req.query.id) {
+        return res.status(401).send({ status: 'Не авторизован' });
     }
 
-    const file= fs.readFileSync(fileName, (err, data) => {
-        if (err) {
-            throw err;
-        }
+    const users = getUsersFromFile();
+    const user = users.find((user) => user.id === req.query.id);
 
+    if (!user) {
+        return res.status(500).send({ status: 'Пользователь не найден' });
+    }
 
-    });
-    const users = JSON.parse(file);
-    console.log(users);
-    // const user = users.find((user) => user.id === req.query.id);
-    const user = {};
     res.status(200).send(user);
 });
 
