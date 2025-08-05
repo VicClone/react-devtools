@@ -20,12 +20,18 @@ const getUsersFromFile = () => {
 };
 
 router.post('/register', async (req, res) => {
-    const { name, surname, email, password } = req.body;
+    const { name, surname, email, password, confirmPassword } = req.body;
 
     if (!name || !email || !password) {
         return res
             .status(400)
             .json({ message: 'Имя, email и пароль обязательны!' });
+    }
+
+    if (password !== confirmPassword) {
+        return res
+            .status(400)
+            .json({ message: 'Пароли не совпадают' });
     }
 
     const id = uuidv4();

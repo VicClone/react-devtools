@@ -13,6 +13,7 @@ function App() {
             try {
                 setIsLoading(true);
                 const id = localStorage.getItem('userId');
+                // const id = localStorage.getItem('id'); неверное поле id
                 const res = await fetch(`${HOST}/api/auth?id=${id}`,
                     {
                         method: 'POST',

@@ -4,11 +4,15 @@
     padding: 20px;
     max-width: 500px;
     margin: auto;
+    overflow: auto;
+    /* лишняя высота */
+    /*height: 200px;*/
 }
 
 .registration-form__fieldset {
     border: #ddd solid 2px;
     border-radius: 8px;
+    min-height: 300px;
 }
 
 .registration-form__legend {

@@ -23,7 +23,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
         try {
             const res = await fetch(`${HOST}/api/register`, {
                 method: 'POST',
-                body: JSON.stringify({ name, surname, email, password }),
+                body: JSON.stringify({ name, surname, email, password, confirmPassword }), // не хватает confirmPassword
                 headers: { 'content-type': 'application/json' },
                 credentials: 'include',
             });
@@ -39,6 +39,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
     };
 
     return (
+        // неверный метод
         // <form className="registration-form" action={(e: unknown) => {onSubmit(e as React.FormEvent<HTMLFormElement>)}} method={"GET"}>
         <form className="registration-form" onSubmit={onSubmit}>
             <fieldset className="registration-form__fieldset">
@@ -59,7 +60,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
                         htmlId="surname"
                         name="surname"
                         required
-                        value={surname}
+                        value={name} // неверный проп
                         onValueChange={setSurname}
                     />
                 </Field>
@@ -71,6 +72,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
                         required
                         value={email}
                         onValueChange={setEmail}
+                        disabled
                     />
                 </Field>
                 <Field title="Пароль" inputHtmlId="password">
@@ -94,6 +96,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
                     />
                 </Field>
 
+                {/* неверный тип */}
                 <Button type="submit">Зарегистрироваться</Button>
             </fieldset>
         </form>
