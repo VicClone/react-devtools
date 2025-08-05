@@ -3,6 +3,7 @@ import { Field } from './Field.tsx';
 import { Input, type InputValue } from '../Input/Input.tsx';
 import { useState } from 'react';
 import { Button } from '../Button/Button.tsx';
+import { HOST } from '../constants.tsx';
 
 interface RegistrationFormProps {
     onSuccess: () => void;
@@ -20,9 +21,9 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
         e.preventDefault();
 
         try {
-            const res = await fetch('http://localhost:3000/api/register', {
+            const res = await fetch(`${HOST}/api/register`, {
                 method: 'POST',
-                body: JSON.stringify({ name, email, password }),
+                body: JSON.stringify({ name, surname, email, password }),
                 headers: { 'content-type': 'application/json' },
                 credentials: 'include',
             });
@@ -33,7 +34,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
                 onSuccess();
             }
         } catch (e) {
-            console.log(e);
+            console.error(e);
         }
     };
 

@@ -2,42 +2,42 @@ import { useEffect, useState } from 'react';
 import './App.css'
 import { RegistrationForm } from './Registration/RegistrationForm.tsx'
 import { ProfilePage } from './ProfilePage/ProfilePage.tsx'
+import { HOST } from './constants.tsx';
 
 function App() {
     const [isSuccess, setIsSuccess] = useState(false);
-    const [isFailure, setIsFailure] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const auth = async () => {
-            const id = localStorage.getItem('userId');
-            const res = await fetch(`http://localhost:3000/api/auth?id=${id}`,
-                {
-                    method: 'POST',
-                    body: JSON.stringify({ id }),
-                    headers: {"content-type": "application/json"},
-                    credentials: 'include'
-                });
-
-            setIsSuccess(res.status === 200);
+            try {
+                setIsLoading(true);
+                const id = localStorage.getItem('userId');
+                const res = await fetch(`${HOST}/api/auth?id=${id}`,
+                    {
+                        method: 'POST',
+                        body: JSON.stringify({ id }),
+                        headers: {"content-type": "application/json"},
+                        credentials: 'include'
+                    });
+                setIsSuccess(res.status === 200);
+            } catch (e) {
+                setIsSuccess(false);
+                console.error(e);
+            } finally {
+                setIsLoading(false);
+            }
         };
 
-        try {
-            setIsLoading(true)
-            auth();
-        }   catch (e) {
-            setIsFailure(true)
-        } finally {
-            setIsLoading(false);
-        }
+        auth();
     }, []);
 
     if (isLoading) {
-        return <h3>Загрузка...</h3>;
-    }
-
-    if (isFailure) {
-        return <h3>Произошла ошибка!</h3>;
+        return (
+            <div className="loading">
+                <h3>Загрузка...</h3>
+            </div>
+        );
     }
 
     return (

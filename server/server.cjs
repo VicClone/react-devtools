@@ -6,7 +6,7 @@ const authRoutes = require('./routes/auth.cjs');
 const app = express();
 const port = 3000;
 
-app.use(express.json()); // для чтения JSON в запросе
+app.use(express.json());
 app.use(
     cors({
         origin: 'http://localhost:5173',
@@ -16,11 +16,11 @@ app.use(
 app.use(
     session({
         secret: 'dev-tools-session-secret',
-        resave: false, // Не сохранять сессию, если она не была изменена
-        saveUninitialized: false, // Не создавать сессию, пока в нее что-то не записано
+        resave: false,
+        saveUninitialized: false,
         cookie: {
             secure: false,
-            maxAge: 1000 * 60 * 60 * 24, // Куки будут действовать 24 часа
+            maxAge: 1000 * 60 * 60 * 24,
             httpOnly: true,
             sameSite: 'lax',
         },

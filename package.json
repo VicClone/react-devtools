@@ -10,7 +10,7 @@
         "preview": "vite preview",
         "server": "node server/server.cjs",
         "dev-server": "nodemon server/server.cjs",
-        "dev-start": "concurrently \"npm run dev\" \"npm run dev-server\""
+        "dev-start": "concurrently \"npm run dev\" \"npm run server\""
     },
     "dependencies": {
         "cors": "^2.8.5",

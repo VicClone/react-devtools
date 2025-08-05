@@ -20,7 +20,7 @@ const getUsersFromFile = () => {
 };
 
 router.post('/register', async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, surname, email, password } = req.body;
 
     if (!name || !email || !password) {
         return res
@@ -34,15 +34,23 @@ router.post('/register', async (req, res) => {
 
     try {
         const users = getUsersFromFile();
-
-        console.log(users);
-
-        users.push({
+        const newUser = {
             id,
             name,
+            surname,
             email,
             password,
-        });
+        };
+
+        if (users.find(user => user.email === email)) {
+            users.map((user, i) => {
+                if (user.email === email) {
+                    users[i] = newUser;
+                }
+            })
+        } else {
+            users.push(newUser);
+        }
 
         await fs.writeFile(FILE_PATH, JSON.stringify(users), (err) => {
             if (err) {
@@ -52,7 +60,7 @@ router.post('/register', async (req, res) => {
             console.log('user created');
         });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return res.status(500).json({ message: err.message });
     }
 
@@ -65,7 +73,6 @@ router.post('/register', async (req, res) => {
 });
 
 router.post('/auth', async (req, res) => {
-    console.log(req.session?.user);
     if (req.session?.user?.id !== req.body.id) {
         return res
             .status(401)
@@ -100,7 +107,12 @@ router.get('/user', (req, res) => {
         return res.status(500).send({ status: 'Пользователь не найден' });
     }
 
-    res.status(200).send(user);
+    res.status(200).send({
+        id: user.id,
+        name: user.name,
+        surname: user.surname,
+        email: user.email,
+    });
 });
 
 module.exports = router;

@@ -1,46 +1,68 @@
 import { Button } from '../Button/Button';
 import './ProfilePage.css';
 import { useEffect, useState } from 'react';
+import { HOST } from '../constants.tsx';
 
 interface SuccessPageProps {
     onExit: () => void;
 }
 
+interface User {
+    id: string;
+    name: string;
+    surname: string;
+    email: string;
+}
+
 export const ProfilePage = ({ onExit }: SuccessPageProps) => {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         const getUser = async () => {
             const userId = localStorage.getItem('userId');
-            const res = await fetch(
-                `http://localhost:3000/api/user?id=${userId}`,
-                { credentials: 'include' }
-            );
+            const res = await fetch(`${HOST}/api/user?id=${userId}`, {
+                credentials: 'include',
+            });
 
             if (res.status !== 200) {
                 return;
             }
 
-            const data = await res.json();
+            const data: User = await res.json();
             setUser(data);
         };
 
-        getUser();
+        try {
+            getUser();
+        } catch (e) {
+            console.error(e);
+        }
     }, []);
-    const logout = async () => {
-        const res = await fetch('http://localhost:3000/api/logout', {
-            credentials: 'include',
-        });
 
-        if (res.status === 200) {
-            onExit();
+    const logout = async () => {
+        try {
+            const res = await fetch(`${HOST}/api/logout`, {
+                credentials: 'include',
+            });
+
+            if (res.status === 200) {
+                onExit();
+            }
+        } catch (e) {
+            console.error(e);
         }
     };
     return (
         <div className="success-page">
             <div className="success-page__layout">
-                {user && user?.email}
+                {user?.name &&
+                    <div className="success-page__cat">
+                        <img src="https://cataas.com/cat/gif" alt="cat" />
+                    </div>
+                }
                 <p className="success-page__text">
+                    Поздравляю, {user?.name} {user?.surname}!
+                    <br />
                     Вы успешно зарегистрировались!
                 </p>
                 <Button onClick={logout} className="success-page__btn">
