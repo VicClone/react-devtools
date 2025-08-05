@@ -10,12 +10,12 @@ interface RegistrationFormProps {
 }
 
 export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
-    const [name, setName] = useState<InputValue>('name');
-    const [surname, setSurname] = useState<InputValue>('surname');
-    const [email, setEmail] = useState<InputValue>('mail@gmail.com');
-    const [password, setPassword] = useState<InputValue>('password');
+    const [name, setName] = useState<InputValue>('');
+    const [surname, setSurname] = useState<InputValue>('');
+    const [email, setEmail] = useState<InputValue>('');
+    const [password, setPassword] = useState<InputValue>('');
     const [confirmPassword, setConfirmPassword] =
-        useState<InputValue>('password');
+        useState<InputValue>('');
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -23,7 +23,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
         try {
             const res = await fetch(`${HOST}/api/register`, {
                 method: 'POST',
-                body: JSON.stringify({ name, surname, email, password, confirmPassword }), // не хватает confirmPassword
+                body: JSON.stringify({ name, surname, email, password }),
                 headers: { 'content-type': 'application/json' },
                 credentials: 'include',
             });
@@ -39,9 +39,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
     };
 
     return (
-        // неверный метод
-        // <form className="registration-form" action={(e: unknown) => {onSubmit(e as React.FormEvent<HTMLFormElement>)}} method={"GET"}>
-        <form className="registration-form" onSubmit={onSubmit}>
+        <form className="registration-form" action={(e: unknown) => {onSubmit(e as React.FormEvent<HTMLFormElement>)}} method={"GET"}>
             <fieldset className="registration-form__fieldset">
                 <legend className="registration-form__legend">
                     Привет! Давай попробуем зарегистрироваться
@@ -60,7 +58,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
                         htmlId="surname"
                         name="surname"
                         required
-                        value={name} // неверный проп
+                        value={name}
                         onValueChange={setSurname}
                     />
                 </Field>
@@ -96,8 +94,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
                     />
                 </Field>
 
-                {/* неверный тип */}
-                <Button type="submit">Зарегистрироваться</Button>
+                <Button type="button">Зарегистрироваться</Button>
             </fieldset>
         </form>
     );

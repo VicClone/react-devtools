@@ -2,6 +2,8 @@ html, body {
     min-height: 100%;
     margin: 0;
     padding: 0;
+    max-height: 0;
+    overflow: hidden;
 }
 
 #root {
@@ -17,6 +19,6 @@ html, body {
 
 /*global style*/
 
-/*button {*/
-/*    background: white !important;*/
-/*}*/
+button {
+    background: white !important;
+}

@@ -5,8 +5,7 @@
     max-width: 500px;
     margin: auto;
     overflow: auto;
-    /* лишняя высота */
-    /*height: 200px;*/
+    height: 200px;
 }
 
 .registration-form__fieldset {
