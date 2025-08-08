@@ -23,7 +23,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
         try {
             const res = await fetch(`${HOST}/api/register`, {
                 method: 'POST',
-                body: JSON.stringify({ name, surname, email, password }),
+                body: JSON.stringify({ name, surname, email, password, confirmPassword }),
                 headers: { 'content-type': 'application/json' },
                 credentials: 'include',
             });
@@ -39,7 +39,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
     };
 
     return (
-        <form className="registration-form" action={(e: unknown) => {onSubmit(e as React.FormEvent<HTMLFormElement>)}} method={"GET"}>
+        <form className="registration-form" onSubmit={onSubmit}>
             <fieldset className="registration-form__fieldset">
                 <legend className="registration-form__legend">
                     Привет! Давай попробуем зарегистрироваться
@@ -58,7 +58,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
                         htmlId="surname"
                         name="surname"
                         required
-                        value={name}
+                        value={surname}
                         onValueChange={setSurname}
                     />
                 </Field>
@@ -70,7 +70,6 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
                         required
                         value={email}
                         onValueChange={setEmail}
-                        disabled
                     />
                 </Field>
                 <Field title="Пароль" inputHtmlId="password">
@@ -94,7 +93,7 @@ export const RegistrationForm = ({ onSuccess }: RegistrationFormProps) => {
                     />
                 </Field>
 
-                <Button type="button">Зарегистрироваться</Button>
+                <Button type="submit">Зарегистрироваться</Button>
             </fieldset>
         </form>
     );

@@ -2,7 +2,6 @@ html, body {
     min-height: 100%;
     margin: 0;
     padding: 0;
-    max-height: 0;
     overflow: hidden;
 }
 
@@ -15,10 +14,4 @@ html, body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-}
-
-/*global style*/
-
-button {
-    background: white !important;
 }

@@ -12,7 +12,7 @@ function App() {
         const auth = async () => {
             try {
                 setIsLoading(true);
-                const id = localStorage.getItem('id');
+                const id = localStorage.getItem('userId');
                 const res = await fetch(`${HOST}/api/auth?id=${id}`,
                     {
                         method: 'POST',
